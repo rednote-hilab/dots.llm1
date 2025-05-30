@@ -66,6 +66,10 @@ For more details, please refer to our [report](dots1_tech_report.pdf).
 
 </div>
 
+### Docker (recommended)
+
+TBD
+
 ### Inference with huggingface
 
 #### Text Completion
