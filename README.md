@@ -35,7 +35,7 @@ Leveraging our meticulously crafted and efficient data processing pipeline, `dot
 **This repo contains the base and instruction-tuned `dots.llm1` model**. which has the following features:
 
 - Type: A MoE model with 14B activated and 142B total parameters trained on 11.2T tokens.
-- Training Stages: Pretraining, SFT, and RLHF.
+- Training Stages: Pretraining and SFT.
 - Architecture: Multi-head Attention with QK-Norm in attention Layer, fine-grained MoE utilizing top-6 out of 128 routed experts, plus 2 shared experts.
 - Number of Layers: 62
 - Number of Attention Heads: 32
