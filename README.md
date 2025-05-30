@@ -22,8 +22,8 @@ Visit our Hugging Face (click links above), search checkpoints with names starti
 ## 1. Introduction
 
 
-`dots.llm1` is a large-scale MoE model that activates 14B parameters out of a total of 142B parameters, delivering performance on par with state-of-the-art models while reducing training and inference costs. 
-Leveraging our meticulously crafted and efficient data processing pipeline, `dots.llm1` achieves performance comparable to Qwen2.5-72B when trained on 11.2T high-quality tokens without synthetic data. To foster further research, we open-source intermediate training checkpoints at every one trillion tokens, providing valuable insights into the learning dynamics of large language models.
+`dots.llm1` is a large-scale MoE model that activates 14B parameters out of a total of 142B parameters, delivering performance on par with state-of-the-art models. 
+Leveraging our meticulously crafted and efficient data processing pipeline, `dots.llm1` achieves performance comparable to Qwen2.5-72B after pretrained on 11.2T high-quality tokens without synthetic data. To foster further research, we open-source intermediate training checkpoints at every one trillion tokens, providing valuable insights into the learning dynamics of large language models.
 
 
 <p align="center">
@@ -34,9 +34,9 @@ Leveraging our meticulously crafted and efficient data processing pipeline, `dot
 
 **This repo contains the base and instruction-tuned `dots.llm1` model**. which has the following features:
 
-- Type: A 14B/142B MoE model trained on 11.2T tokens.
-- Training Stage: Pretraining & Post-training
-- Architecture: Multi-head Attention with QK-Norm in Attention Layer, fine-grained MoE utilizing top-6 out of 128 routed experts, plus 2 shared experts.
+- Type: A MoE model with 14B activated and 142B total parameters trained on 11.2T tokens.
+- Training Stages: Pretraining, SFT, and RLHF.
+- Architecture: Multi-head Attention with QK-Norm in attention Layer, fine-grained MoE utilizing top-6 out of 128 routed experts, plus 2 shared experts.
 - Number of Layers: 62
 - Number of Attention Heads: 32
 - Context Length: 32,768 tokens
@@ -44,11 +44,10 @@ Leveraging our meticulously crafted and efficient data processing pipeline, `dot
 
 The highlights from `dots.llm1` include:
 - **Enhanced Data Processing**: We propose a scalable and fine-grained three-stage data processing framework designed to generate large-scale, high-quality and diverse data for pretraining.
-- **Performance and Cost Efficiency**: `dots.llm1` is an open-source model that activates only 14B parameters during inference while delivering comprehensive and computationally efficient performance.
-- **Infrastructure**: we introduce an innovative moe all-to-all communication and computation overlapping recipe based on 1F1B pipeline scheduling and an efficient grouped GEMM implementation to boost computational efficiency.
-- **No Synthetic Data during Pre-Train** Trained on 11.2 trillion high-quality tokens without reliance on synthetic data.
-- **Open Accessibility to Model Dynamics**: releasing intermediate training checkpoints as
-open-source,  enabling deeper insights into the dynamics of large models.
+- **Performance and Cost Efficiency**: `dots.llm1` is an open-source model that activates only 14B parameters at inference, delivering both comprehensive capabilities and high computational efficiency.
+- **Infrastructure**: We introduce an innovative MoE all-to-all communication and computation overlapping recipe based on interleaved 1F1B pipeline scheduling and an efficient grouped GEMM implementation to boost computational efficiency.
+- **No Synthetic Data during Pre-Train**: 11.2 trillion high-quality non-synthetic tokens was used in base model pretraining.
+- **Open Accessibility to Model Dynamics**: Intermediate model checkpoints for every 1T tokens trained are released,  facilitating future research into the learning dynamics of large language models.
 
 
 For more details, please refer to our [report](dots1_tech_report.pdf).
