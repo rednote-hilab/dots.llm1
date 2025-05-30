@@ -1,0 +1,145 @@
+# dots1
+
+<p align="center">
+    <img src="figures/new_logo.png" width="200"/>
+<p>
+
+<p align="center">
+    &nbsp&nbsp🤗 <a href="https://huggingface.co/Qwen">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp 📑 <a href="https://arxiv.org/abs/">Paper</a> &nbsp&nbsp 
+<br>
+🖥️ <a href="">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp📕 <a href="">rednote</a>&nbsp&nbsp
+</p>
+
+
+Visit our Hugging Face (click links above), search checkpoints with names starting with `dots.llm1` or visit the [dots1 collection](), and you will find all you need! Enjoy!
+
+
+## News
+
+- 2025.06.06: We released the `dots.llm1` series. Check our [Report](https://qwenlm.github.io/blog/qwen3) for more details!
+
+
+## 1. Introduction
+
+
+`dots.llm1` is a large-scale MoE model that activates 14B parameters out of a total of 142B parameters, delivering performance on par with state-of-the-art models while reducing training and inference costs. 
+Leveraging our meticulously crafted and efficient data processing pipeline, `dots.llm1` achieves performance comparable to Qwen2.5-72B when trained on 11.2T high-quality tokens without synthetic data. To foster further research, we open-source intermediate training checkpoints at every one trillion tokens, providing valuable insights into the learning dynamics of large language models.
+
+
+<p align="center">
+  <img width="90%" src="./figures/performance.png">
+</p>
+
+## 2. Model Summary
+
+**This repo contains the base and instruction-tuned `dots.llm1` model**. which has the following features:
+
+- Type: A 14B/142B MoE model trained on 11.2T tokens.
+- Training Stage: Pretraining & Post-training
+- Architecture: Multi-head Attention with QK-Norm in Attention Layer, fine-grained MoE utilizing top-6 out of 128 routed experts, plus 2 shared experts.
+- Number of Layers: 62
+- Number of Attention Heads: 32
+- Context Length: 32,768 tokens
+- License: MIT
+
+The highlights from `dots.llm1` include:
+- **Enhanced Data Processing**: We propose a scalable and fine-grained three-stage data processing framework designed to generate large-scale, high-quality and diverse data for pretraining.
+- **Performance and Cost Efficiency**: `dots.llm1` is an open-source model that activates only 14B parameters during inference while delivering comprehensive and computationally efficient performance.
+- **Infrastructure**: we introduce an innovative moe all-to-all communication and computation overlapping recipe based on 1F1B pipeline scheduling and an efficient grouped GEMM implementation to boost computational efficiency.
+- **No Synthetic Data during Pre-Train** Trained on 11.2 trillion high-quality tokens without reliance on synthetic data.
+- **Open Accessibility to Model Dynamics**: releasing intermediate training checkpoints as
+open-source,  enabling deeper insights into the dynamics of large models.
+
+
+For more details, please refer to our [report](dots1_tech_report.pdf).
+
+## 3. Example Usage
+
+### Model Downloads
+
+<div align="center">
+
+| **Model** | **#Total Params** | **#Activated Params** | **Context Length** | **Download Link** |
+| :------------: | :------------: | :------------: | :------------: | :------------: |
+| dots.llm1.base | 142B | 14B | 32K   | [🤗 Hugging Face](https://huggingface.co/rednote-hilab/dots.llm1.base)   |
+| dots.llm1.inst  | 142B | 14B |  32K   | [🤗 Hugging Face](https://huggingface.co/rednote-hilab/dots.llm1.inst)   |
+
+</div>
+
+### Inference with huggingface
+
+#### Text Completion
+
+```python
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
+
+model_name = "rednote-hilab/dots.llm1.base"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.bfloat16, attn_implementation="eager")
+model.generation_config = GenerationConfig.from_pretrained(model_name)
+
+text = "An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is"
+inputs = tokenizer(text, return_tensors="pt")
+outputs = model.generate(**inputs.to(model.device), max_new_tokens=100)
+result = tokenizer.decode(outputs[0], skip_special_tokens=True)
+print(result)
+```
+
+#### Chat Completion
+
+```python
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
+
+model_name = "rednote-hilab/dots.llm1.inst"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.bfloat16, attn_implementation="eager")
+model.generation_config = GenerationConfig.from_pretrained(model_name)
+
+messages = [
+    {"role": "user", "content": "Write a piece of quicksort code in C++"}
+]
+input_tensor = tokenizer.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt")
+outputs = model.generate(input_tensor.to(model.device), max_new_tokens=200)
+
+result = tokenizer.decode(outputs[0][input_tensor.shape[1]:], skip_special_tokens=True)
+print(result)
+```
+
+
+### Inference with sglang
+[SGLang](https://github.com/sgl-project/sglang) is a fast serving framework for large language models and vision language models. SGLang could be used to launch a server with OpenAI-compatible API service. `sglang>=***` is required. It is as easy as
+
+```shell
+python -m sglang.launch_server --model-path dots.llm1.inst --tp 8 --host 0.0.0.0 --port 8000
+```
+An OpenAI-compatible API will be available at `http://localhost:8000/v1`.
+
+### Inference with vllm
+[vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine for LLMs.
+`vllm>=***` is recommended.
+
+```shell
+vllm serve dots.llm1.inst --port 8000 --tensor-parallel-size 8
+```
+An OpenAI-compatible API will be available at `http://localhost:8000/v1`.
+
+## 4. Evaluation Results
+
+Detailed evaluation results are reported in this [📑 report](dots1_tech_report.pdf).
+
+## Citation
+
+If you find `dots.llm1` is useful or want to use in your projects, please kindly cite our paper:
+
+```
+@article{dots1,
+      title={dots.llm1 Technical Report}, 
+      author={rednote-hilab},
+      journal={arXiv preprint arXiv:TBD},
+      year={2025}
+}
+```
