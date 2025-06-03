@@ -5,18 +5,18 @@
 <p>
 
 <p align="center">
-    &nbsp&nbsp🤗 <a href="https://huggingface.co/Qwen">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp 📑 <a href="https://arxiv.org/abs/">Paper</a> &nbsp&nbsp 
+    &nbsp&nbsp🤗 <a href="https://huggingface.co/rednote-hilab">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp 📑 <a href="dots1_tech_report.pdf">Paper</a> &nbsp&nbsp 
 <br>
-🖥️ <a href="">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp📕 <a href="">rednote</a>&nbsp&nbsp
+🖥️ <a href="TBD">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="TBD">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp📕 <a href="TBD">rednote</a>&nbsp&nbsp
 </p>
 
 
-Visit our Hugging Face (click links above), search checkpoints with names starting with `dots.llm1` or visit the [dots1 collection](), and you will find all you need! Enjoy!
+Visit our Hugging Face (click links above), search checkpoints with names starting with `dots.llm1` or visit the [dots1 collection](https://huggingface.co/collections/rednote-hilab/dotsllm1-68246aaaaba3363374a8aa7c), and you will find all you need! Enjoy!
 
 
 ## News
 
-- 2025.06.06: We released the `dots.llm1` series. Check our [Report](https://qwenlm.github.io/blog/qwen3) for more details!
+- 2025.06.06: We released the `dots.llm1` series. Check our [report](dots1_tech_report.pdf) for more details!
 
 
 ## 1. Introduction
@@ -43,12 +43,12 @@ Leveraging our meticulously crafted and efficient data processing pipeline, `dot
 - License: MIT
 
 The highlights from `dots.llm1` include:
-- **Enhanced Data Processing**: We propose a scalable and fine-grained three-stage data processing framework designed to generate large-scale, high-quality and diverse data for pretraining.
-- **Performance and Cost Efficiency**: `dots.llm1` is an open-source model that activates only 14B parameters at inference, delivering both comprehensive capabilities and high computational efficiency.
-- **Infrastructure**: We introduce an innovative MoE all-to-all communication and computation overlapping recipe based on interleaved 1F1B pipeline scheduling and an efficient grouped GEMM implementation to boost computational efficiency.
-- **No Synthetic Data during Pre-Train**: 11.2 trillion high-quality non-synthetic tokens was used in base model pretraining.
-- **Open Accessibility to Model Dynamics**: Intermediate model checkpoints for every 1T tokens trained are released,  facilitating future research into the learning dynamics of large language models.
 
+- **Enhanced Data Processing**: We propose a scalable and fine-grained *three-stage* data processing framework designed to generate large-scale, high-quality and diverse data for pretraining.
+- **No Synthetic Data during Pretraining**: *11.2 trillion* high-quality non-synthetic tokens was used in base model pretraining.
+- **Performance and Cost Efficiency**: `dots.llm1` is an open-source model that activates only *14B* parameters at inference, delivering both comprehensive capabilities and high computational efficiency.
+- **Infrastructure**: We introduce an innovative MoE all-to-all communication and computation overlapping recipe based on interleaved 1F1B pipeline scheduling and an efficient grouped GEMM implementation to boost computational efficiency.
+- **Open Accessibility to Model Dynamics**: Intermediate model checkpoints for *every 1T tokens* trained are released, facilitating future research into the learning dynamics of large language models.
 
 For more details, please refer to our [report](dots1_tech_report.pdf).
 
@@ -67,7 +67,39 @@ For more details, please refer to our [report](dots1_tech_report.pdf).
 
 ### Docker (recommended)
 
-TBD
+
+The docker images are available on Docker Hub as ***, based on the official images.
+
+You can start a server via vllm.
+
+```shell
+docker run --gpus all \
+    -v ~/.cache/huggingface:/root/.cache/huggingface \
+    -p 8000:8000 \
+    --ipc=host \
+    dots1_infer:vllm_latest \
+    --model ~/.cache/huggingface/dots.1 \
+    --tensor-parallel-size 1 \
+    --trust-remote-code \
+    --served-model-name dots1
+```
+
+Then you can verify whether the model is running successfully in the following way.
+
+```shell
+curl http://localhost:8000/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "dots1",
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Who won the world series in 2020?"}
+        ],
+        "max_tokens": 32,
+        "temperature": 0
+    }'
+```
+
 
 ### Inference with huggingface
 
@@ -122,8 +154,7 @@ python -m sglang.launch_server --model-path dots.llm1.inst --tp 8 --host 0.0.0.0
 An OpenAI-compatible API will be available at `http://localhost:8000/v1`.
 
 ### Inference with vllm
-[vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine for LLMs.
-`vllm>=***` is recommended.
+[vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine for LLMs. `vllm>=***` is recommended.
 
 ```shell
 vllm serve dots.llm1.inst --port 8000 --tensor-parallel-size 8
