@@ -41,6 +41,7 @@ Leveraging our meticulously crafted and efficient data processing pipeline, `dot
 - Architecture: Multi-head Attention with QK-Norm in attention Layer, fine-grained MoE utilizing top-6 out of 128 routed experts, plus 2 shared experts.
 - Number of Layers: 62
 - Number of Attention Heads: 32
+- Supported Languages: English, Chinese
 - Context Length: 32,768 tokens
 - License: MIT
 
