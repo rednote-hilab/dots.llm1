@@ -1,7 +1,5 @@
-# dots1
-
 <p align="center">
-    <img src="figures/new_logo.png" width="200"/>
+    <img src="figures/new_logo2.png" width="400"/>
 <p>
 
 <p align="center">
@@ -9,8 +7,6 @@
 <br>
 🖥️ <a href="https://huggingface.co/spaces/rednote-hilab/dots-demo">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="figures/wechat.png">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp📕 <a href="https://www.xiaohongshu.com/user/profile/683ffe42000000001d021a4c">rednote</a>&nbsp&nbsp
 </p>
-
-
 
 
 Visit our Hugging Face (click links above), search checkpoints with names starting with `dots.llm1` or visit the [dots1 collection](https://huggingface.co/collections/rednote-hilab/dotsllm1-68246aaaaba3363374a8aa7c), and you will find all you need! Enjoy!
@@ -104,6 +100,8 @@ curl http://localhost:8000/v1/chat/completions \
 
 ### Inference with huggingface
 
+We are working to merge it into Transformers ([PR #38143](https://github.com/huggingface/transformers/pull/38143)).
+
 #### Text Completion
 
 ```python
@@ -113,8 +111,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 model_name = "rednote-hilab/dots.llm1.base"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.bfloat16, attn_implementation="eager")
-model.generation_config = GenerationConfig.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.bfloat16)
 
 text = "An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is"
 inputs = tokenizer(text, return_tensors="pt")
@@ -132,8 +129,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 model_name = "rednote-hilab/dots.llm1.inst"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.bfloat16, attn_implementation="eager")
-model.generation_config = GenerationConfig.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.bfloat16)
 
 messages = [
     {"role": "user", "content": "Write a piece of quicksort code in C++"}
@@ -145,21 +141,26 @@ result = tokenizer.decode(outputs[0][input_tensor.shape[1]:], skip_special_token
 print(result)
 ```
 
-
-### Inference with sglang
-[SGLang](https://github.com/sgl-project/sglang) is a fast serving framework for large language models and vision language models. SGLang could be used to launch a server with OpenAI-compatible API service. `sglang>=***` is required. It is as easy as
-
-```shell
-python -m sglang.launch_server --model-path dots.llm1.inst --tp 8 --host 0.0.0.0 --port 8000
-```
-An OpenAI-compatible API will be available at `http://localhost:8000/v1`.
-
 ### Inference with vllm
-[vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine for LLMs. `vllm>=***` is recommended.
+
+[vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine for LLMs. Official support for this feature is covered in [this pull request](https://github.com/vllm-project/vllm/pull/18254).
 
 ```shell
 vllm serve dots.llm1.inst --port 8000 --tensor-parallel-size 8
 ```
+
+An OpenAI-compatible API will be available at `http://localhost:8000/v1`.
+
+### Inference with sglang
+
+[SGLang](https://github.com/sgl-project/sglang) is a fast serving framework for large language models and vision language models. SGLang could be used to launch a server with OpenAI-compatible API service. Official support for this feature is covered in [this pull request](https://github.com/sgl-project/sglang/pull/6471).
+
+Getting started is as simple as running:
+
+```shell
+python -m sglang.launch_server --model-path dots.llm1.inst --tp 8 --host 0.0.0.0 --port 8000
+```
+
 An OpenAI-compatible API will be available at `http://localhost:8000/v1`.
 
 ## 4. Evaluation Results
