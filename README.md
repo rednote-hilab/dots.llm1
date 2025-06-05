@@ -1,5 +1,7 @@
+# dots1
+
 <p align="center">
-    <img src="figures/new_logo2.png" width="400"/>
+    <img src="figures/new_logo2.png" width="300"/>
 <p>
 
 <p align="center">
@@ -143,7 +145,7 @@ print(result)
 
 ### Inference with vllm
 
-[vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine for LLMs. Official support for this feature is covered in [this pull request](https://github.com/vllm-project/vllm/pull/18254).
+[vLLM](https://github.com/vllm-project/vllm) is a high-throughput and memory-efficient inference and serving engine for LLMs. Official support for this feature is covered in [PR #18254](https://github.com/vllm-project/vllm/pull/18254).
 
 ```shell
 vllm serve dots.llm1.inst --port 8000 --tensor-parallel-size 8
@@ -153,7 +155,7 @@ An OpenAI-compatible API will be available at `http://localhost:8000/v1`.
 
 ### Inference with sglang
 
-[SGLang](https://github.com/sgl-project/sglang) is a fast serving framework for large language models and vision language models. SGLang could be used to launch a server with OpenAI-compatible API service. Official support for this feature is covered in [this pull request](https://github.com/sgl-project/sglang/pull/6471).
+[SGLang](https://github.com/sgl-project/sglang) is a fast serving framework for large language models and vision language models. SGLang could be used to launch a server with OpenAI-compatible API service. Official support for this feature is covered in [PR #6471](https://github.com/sgl-project/sglang/pull/6471).
 
 Getting started is as simple as running:
 
