@@ -5,10 +5,12 @@
 <p>
 
 <p align="center">
-    &nbsp&nbsp🤗 <a href="https://huggingface.co/rednote-hilab">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp 📑 <a href="dots1_tech_report.pdf">Paper</a> &nbsp&nbsp 
+    &nbsp&nbsp🤗 <a href="https://huggingface.co/rednote-hilab">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp 📑 <a href="https://github.com/rednote-hilab/dots.llm1/blob/main/dots1_tech_report.pdf">Paper</a> &nbsp&nbsp 
 <br>
-🖥️ <a href="TBD">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="TBD">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp📕 <a href="TBD">rednote</a>&nbsp&nbsp
+🖥️ <a href="https://huggingface.co/spaces/rednote-hilab/dots-demo">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="TBD">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp📕 <a href="TBD">rednote</a>&nbsp&nbsp
 </p>
+
+
 
 
 Visit our Hugging Face (click links above), search checkpoints with names starting with `dots.llm1` or visit the [dots1 collection](https://huggingface.co/collections/rednote-hilab/dotsllm1-68246aaaaba3363374a8aa7c), and you will find all you need! Enjoy!
@@ -16,7 +18,7 @@ Visit our Hugging Face (click links above), search checkpoints with names starti
 
 ## News
 
-- 2025.06.06: We released the `dots.llm1` series. Check our [report](dots1_tech_report.pdf) for more details!
+- 2025.06.06: We released the `dots.llm1` series. Check our [report](https://github.com/rednote-hilab/dots.llm1/blob/main/dots1_tech_report.pdf) for more details!
 
 
 ## 1. Introduction
@@ -50,8 +52,6 @@ The highlights from `dots.llm1` include:
 - **Infrastructure**: We introduce an innovative MoE all-to-all communication and computation overlapping recipe based on interleaved 1F1B pipeline scheduling and an efficient grouped GEMM implementation to boost computational efficiency.
 - **Open Accessibility to Model Dynamics**: Intermediate model checkpoints for *every 1T tokens* trained are released, facilitating future research into the learning dynamics of large language models.
 
-For more details, please refer to our [report](dots1_tech_report.pdf).
-
 ## 3. Example Usage
 
 ### Model Downloads
@@ -68,7 +68,7 @@ For more details, please refer to our [report](dots1_tech_report.pdf).
 ### Docker (recommended)
 
 
-The docker images are available on Docker Hub as ***, based on the official images.
+The docker images are available on Docker Hub as `https://hub.docker.com/repository/docker/rednotehilab/dots1/tags`, based on the official images.
 
 You can start a server via vllm.
 
@@ -77,9 +77,9 @@ docker run --gpus all \
     -v ~/.cache/huggingface:/root/.cache/huggingface \
     -p 8000:8000 \
     --ipc=host \
-    dots1_infer:vllm_latest \
-    --model ~/.cache/huggingface/dots.1 \
-    --tensor-parallel-size 1 \
+    rednotehilab:dots1:vllm-openai-v0.9.0.1 \
+    --model rednotehilab/dots.llm1.inst \
+    --tensor-parallel-size 8 \
     --trust-remote-code \
     --served-model-name dots1
 ```
@@ -163,7 +163,7 @@ An OpenAI-compatible API will be available at `http://localhost:8000/v1`.
 
 ## 4. Evaluation Results
 
-Detailed evaluation results are reported in this [📑 report](dots1_tech_report.pdf).
+Detailed evaluation results are reported in this [📑 report](https://github.com/rednote-hilab/dots.llm1/blob/main/dots1_tech_report.pdf).
 
 ## Citation
 
