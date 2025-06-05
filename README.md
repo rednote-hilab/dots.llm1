@@ -79,7 +79,7 @@ docker run --gpus all \
     -p 8000:8000 \
     --ipc=host \
     rednotehilab/dots1:vllm-openai-v0.9.0.1 \
-    --model rednotehilab/dots.llm1.inst \
+    --model rednote-hilab/dots.llm1.inst \
     --tensor-parallel-size 8 \
     --trust-remote-code \
     --served-model-name dots1
