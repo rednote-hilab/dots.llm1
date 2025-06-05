@@ -24,7 +24,7 @@ Visit our Hugging Face (click links above), search checkpoints with names starti
 ## 1. Introduction
 
 
-`dots.llm1` is a large-scale MoE model that activates 14B parameters out of a total of 142B parameters, delivering performance on par with state-of-the-art models. 
+The `dots.llm1` model is a large-scale MoE model that activates 14B parameters out of a total of 142B parameters, delivering performance on par with state-of-the-art models. 
 Leveraging our meticulously crafted and efficient data processing pipeline, `dots.llm1` achieves performance comparable to Qwen2.5-72B after pretrained on 11.2T high-quality tokens without synthetic data. To foster further research, we open-source intermediate training checkpoints at every one trillion tokens, providing valuable insights into the learning dynamics of large language models.
 
 
