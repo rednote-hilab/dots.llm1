@@ -7,7 +7,7 @@
 <p align="center">
     &nbsp&nbsp🤗 <a href="https://huggingface.co/rednote-hilab">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp 📑 <a href="https://github.com/rednote-hilab/dots.llm1/blob/main/dots1_tech_report.pdf">Paper</a> &nbsp&nbsp 
 <br>
-🖥️ <a href="https://huggingface.co/spaces/rednote-hilab/dots-demo">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="TBD">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp📕 <a href="TBD">rednote</a>&nbsp&nbsp
+🖥️ <a href="https://huggingface.co/spaces/rednote-hilab/dots-demo">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="figures/wechat.png">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp📕 <a href="https://www.xiaohongshu.com/user/profile/683ffe42000000001d021a4c">rednote</a>&nbsp&nbsp
 </p>
 
 
@@ -69,7 +69,7 @@ The highlights from `dots.llm1` include:
 ### Docker (recommended)
 
 
-The docker images are available on Docker Hub as `https://hub.docker.com/repository/docker/rednotehilab/dots1/tags`, based on the official images.
+The docker images are available on [Docker Hub](https://hub.docker.com/repository/docker/rednotehilab/dots1/tags), based on the official images.
 
 You can start a server via vllm.
 
@@ -78,7 +78,7 @@ docker run --gpus all \
     -v ~/.cache/huggingface:/root/.cache/huggingface \
     -p 8000:8000 \
     --ipc=host \
-    rednotehilab:dots1:vllm-openai-v0.9.0.1 \
+    rednotehilab/dots1:vllm-openai-v0.9.0.1 \
     --model rednotehilab/dots.llm1.inst \
     --tensor-parallel-size 8 \
     --trust-remote-code \
